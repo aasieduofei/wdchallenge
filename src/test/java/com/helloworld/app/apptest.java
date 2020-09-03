@@ -1,21 +1,50 @@
 package com.helloworld.app;
 
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.After;
+import static org.junit.Assert.*;
+
 /**
- * Hello world!
+ * Unit test for simple App.
  */
-public class App
+public class AppTest
 {
 
-    private final String message = "Hello World!";
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
-    public App() {}
-
-    public static void main(String[] args) {
-        System.out.println(new App().getMessage());
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
     }
 
-    private final String getMessage() {
-        return message;
+    @Test
+    public void testAppConstructor() {
+        try {
+            new App();
+        } catch (Exception e) {
+            fail("Construction failed.");
+        }
+    }
+
+    @Test
+    public void testAppMain()
+    {
+        App.main(null);
+        try {
+            assertEquals("Hello World!" + System.getProperty("line.separator"), outContent.toString());
+        } catch (AssertionError e) {
+            fail("\"message\" is not \"Hello World!\"");
+        }
+    }
+
+    @After
+    public void cleanUpStreams() {
+        System.setOut(null);
     }
 
 }
+
